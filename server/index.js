@@ -241,6 +241,7 @@ app.post('/api/edit-breed', (req, res, next) => {
 
 app.post('/api/classify', upload.single('image'), (req, res, next) => {
   const imageToClassify = path.join(__dirname, `uploads/${req.file.filename}`);
+
   classify(imageToClassify)
     .then(result => {
       let label;
@@ -258,21 +259,18 @@ app.post('/api/classify', upload.single('image'), (req, res, next) => {
         from "breeds"
        where "name" = $1
       `;
+
       db.query(sql, [label])
         .then(result => {
+          let info = {};
           if (result.rows[0]) {
-            res.status(200).json({
-              label: label,
-              confidence: confidence,
-              info: result.rows[0]
-            });
-          } else {
-            res.status(200).json({
-              label: label,
-              confidence: confidence,
-              info: {}
-            });
+            info = result.rows[0];
           }
+          res.status(200).json({
+            label: label,
+            confidence: confidence,
+            info: info
+          });
         })
         .catch(err => next(err));
     })

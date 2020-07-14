@@ -11,8 +11,7 @@ class MainView extends React.Component {
           <Header />
         </div>
         <div className={`container-fluid d-flex justify-content-center
-      flex-wrap align-content-between d-lg-none`}>
-          <h2 className="m-2 p-2">Doginator 3000</h2>
+      flex-wrap align-content-between d-lg-none pt-3`}>
           <div className="main-portrait-container col-9">
             <Link to="/edit-user">
               <img src="./images/frenchie.jpg" alt=""

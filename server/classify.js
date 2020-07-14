@@ -66,8 +66,6 @@ const classify = async path => {
   const dataset = Object.assign({}, ...tensors);
   classifier.setClassifierDataset(dataset);
 
-  // eslint-disable-next-line no-console
-
   const predictions = await classifier.predictClass(logits);
 
   return predictions;

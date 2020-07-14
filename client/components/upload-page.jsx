@@ -7,16 +7,15 @@ class UploadPage extends React.Component {
     super(props);
     this.state = {
       imagePath: '',
-      prediction: ''
+      gotResult: false
     };
     this.uploadImageRef = React.createRef();
-    this.uploadImageRefDesktop = React.createRef();
     this.displayImageRef = React.createRef();
     this.previewImage = this.previewImage.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
   }
 
-  previewImage(e) {
+  previewImage(event) {
     const imagePath = event.target.files[0]
       ? URL.createObjectURL(event.target.files[0])
       : '';
@@ -29,13 +28,11 @@ class UploadPage extends React.Component {
     const { toggleLoading, changePredictionState } = this.props;
     const imageData = new FormData();
     const imageToUpload = this.uploadImageRef.current.files[0];
-    const imageToUploadDesktop = this.uploadImageRefDesktop.current.files[0];
 
-    imageToUploadDesktop
-      ? imageData.append('image', imageToUploadDesktop, imageToUploadDesktop.name)
-      : imageData.append('image', imageToUpload, imageToUpload.name);
+    imageData.append('image', imageToUpload, imageToUpload.name);
 
     toggleLoading(true);
+
     fetch('/api/classify', {
       method: 'POST',
       body: imageData
@@ -43,9 +40,7 @@ class UploadPage extends React.Component {
       .then(result => result.json())
       .then(prediction => {
         prediction.imagePath = this.state.imagePath;
-        prediction.imageName = imageToUploadDesktop
-          ? imageToUploadDesktop.name
-          : imageToUpload.name;
+        prediction.imageName = imageToUpload.name;
         changePredictionState(prediction);
       })
       .catch(err => {
@@ -60,19 +55,18 @@ class UploadPage extends React.Component {
   render() {
     const { imagePath, gotResult } = this.state;
 
-    const redirect = gotResult
-      ? <Redirect to="/ViewClassifyResult" />
-      : '';
-
     const imagePreview = imagePath
       ? (
         <div>
           <img src={imagePath}
             ref={this.displayImageRef}
-            className={`rounded-circle img-thumbnail
-                        img-fluid preview-image`} />
+            className='rounded-circle img-thumbnail img-fluid preview-image' />
         </div>
       )
+      : '';
+
+    const redirect = gotResult
+      ? <Redirect to="/ViewClassifyResult" />
       : '';
 
     return (
@@ -98,6 +92,8 @@ class UploadPage extends React.Component {
             </div>
           </div>
         </div>
+
+        {/* desktop view */}
         <div className='d-none d-lg-block'>
           <Header />
           <div className="preview-image-container my-2 mx-auto">
