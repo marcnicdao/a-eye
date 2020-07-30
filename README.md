@@ -1,6 +1,6 @@
 # UNDER CONSTRUCTION
 # a-eye
-A dynamic mobile application for dog lovers who want to classify their dog breed AND MORE!!!
+A dynamic mobile application for dog lovers who want to classify their dog breed using KNN classifier from a pretrained model
 
 # Live Demo
 A live demo of the of application can be viewed at this [link](https://a-eye.marcnicdao.com/)
